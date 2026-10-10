@@ -107,6 +107,55 @@ combine_results = pd.read_csv(REPO_ROOT / 'data' / 'raw' / 'combine_results.csv'
 
 For notebooks launched from `notebooks/`, use the repository-root discovery helper in your notebook instead of assuming the working directory is the root.
 
+## Collaboration and pull request workflow
+
+**`main` is the shared integration branch.** Do not push directly to `main`; create a feature branch, open a pull request, and wait for the **Python CI** GitHub Actions check to pass before merging. Keep pull requests focused and resolve review conversations before merging.
+
+> **Current enforcement status:** GitHub currently reports the `main` protection rule as **not enforced** while this repository is private under its current plan. The workflow below is our **team policy** even while GitHub does not technically block direct pushes or merges. If the repository is made public (or moved to an eligible plan), verify the rule becomes enforced before relying on automatic protection.
+
+### Start a change
+
+From the repository root in PowerShell:
+
+```powershell
+git switch main
+git pull origin main
+git switch -c feature/short-description
+```
+
+Make changes on your branch. Run the same test command as CI locally before committing:
+
+```powershell
+python -m pytest tests -v
+```
+
+Then commit and publish your branch:
+
+```powershell
+git add <files-you-changed>
+git commit -m "Describe the change"
+git push -u origin HEAD
+```
+
+Open a pull request targeting **`main`**. Check the GitHub Actions **Python CI** result, fix any failures, and resolve review conversations. If `main` has advanced, update your branch and allow CI to rerun before merging.
+
+### Merge policy
+
+- **Allowed:** **Create a merge commit** or **Squash and merge** (choose based on whether the branch's individual commits are worth retaining).
+- **Not used:** Rebase merging. The branch rule must leave **Require linear history** disabled to permit merge commits.
+- **Expected before merging:** a pull request, passing **Python CI**, an up-to-date branch, and resolved review conversations.
+- **Not currently required:** formal reviewer approvals. Reviews are still encouraged.
+- **Never:** force-push or delete `main`, commit `.env`, or commit Kaggle datasets.
+
+After the PR is merged, update your local `main` before starting the next change:
+
+```powershell
+git switch main
+git pull origin main
+```
+
+CI should run without downloading the Kaggle competition data; tests should use small synthetic fixtures where possible.
+
 ## Git and data hygiene
 
 Keep these entries in `.gitignore`:
