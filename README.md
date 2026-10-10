@@ -111,8 +111,6 @@ For notebooks launched from `notebooks/`, use the repository-root discovery help
 
 **`main` is the shared integration branch.** Do not push directly to `main`; create a feature branch, open a pull request, and wait for the **Python CI** GitHub Actions check to pass before merging. Keep pull requests focused and resolve review conversations before merging.
 
-> **Current enforcement status:** GitHub currently reports the `main` protection rule as **not enforced** while this repository is private under its current plan. The workflow below is our **team policy** even while GitHub does not technically block direct pushes or merges. If the repository is made public (or moved to an eligible plan), verify the rule becomes enforced before relying on automatic protection.
-
 ### Start a change
 
 From the repository root in PowerShell:
